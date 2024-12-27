@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { rateFilm } from "../action/ratedaction";
+import { useNavigate } from "react-router-dom";
 
-const MovieDetailView = ({ movie, credits }) => {
-  const topCast = credits.cast.slice(0, 5);
+const MovieDetailView = ({ movie, credits, similarMovies }) => {
+  const topCast = credits.cast.slice(0, 6);
   const producers = credits.crew.filter((member) => member.job === "Producer");
   const theme = useSelector((state) => state.theme.theme);
   const dispatch = useDispatch();
   const ratedFilms = useSelector((state) => state.ratings.ratedFilms);
-
+  const navigate = useNavigate();
   const [alertMessage, setAlertMessage] = useState("");
 
   const currentRating =
@@ -36,20 +37,43 @@ const MovieDetailView = ({ movie, credits }) => {
           }}
         ></div>
 
-        <div className="max-w-5xl mx-auto px-4 flex flex-col md:flex-row items-start relative z-10">
-          <div className="flex-shrink-0">
-            <img
-              src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-              alt={movie.title}
-              className="w-72 h-100 rounded-lg"
-            />
+        <div className="max-w-5xl mx-auto px-4 grid grid-cols-[300px,690px] auto-rows-auto items-start relative z-10 pt-10 pb-10">
+          {/* Gambar film dan Produser */}
+          <div className="flex flex-col gap-6 max-w-[300px]">
+            {/* Gambar film */}
+            <div className="flex-shrink-0">
+              <img
+                src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                alt={movie.title}
+                className="w-72 h-100 rounded-lg"
+              />
+            </div>
+
             {alertMessage && (
-              <div className="alert mt-5 alert-success max-w-72 text-white z-50 fixed px-2 py-1 rounded-md text-sm transition-all duration-500 ">
+              <div className=" flex flex-col alert alert-success max-w-72 text-white z-50  px-2 py-1 rounded-md text-sm transition-all duration-500">
                 {alertMessage}
               </div>
             )}
+
+            {/* Producer */}
+            <div className="mt-6">
+              <h2 className="text-2xl font-semibold mb-2 text-red-500">
+                Producers
+              </h2>
+              <ul className="space-y-1">
+                {producers.map((producer) => (
+                  <li key={producer.id}>
+                    <span className="font-semibold text-black dark:text-white">
+                      {producer.name}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
-          <div className="ml-8 mt-6 md:mt-0 flex flex-col space-y-4 text-left dark:text-white">
+
+          {/* Detail film */}
+          <div className="mt-6 md:mt-0 flex flex-col space-y-4 text-left">
             <h1 className="text-4xl font-bold text-red-500 drop-shadow-lg">
               {movie.title}
             </h1>
@@ -57,6 +81,7 @@ const MovieDetailView = ({ movie, credits }) => {
               <span>{movie.release_date.split("-")[0]}</span> &bull;{" "}
               <span>{movie.genres.map((genre) => genre.name).join(", ")}</span>
             </div>
+
             <p className="text-gray-900 dark:text-white font-semibold">
               {movie.overview}
             </p>
@@ -82,7 +107,7 @@ const MovieDetailView = ({ movie, credits }) => {
               </span>
               <button
                 onClick={removeRating}
-                className="bg-red-500 rounded-lg font-poppins p-2 "
+                className="bg-red-500 rounded-lg font-poppins p-2"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -107,8 +132,11 @@ const MovieDetailView = ({ movie, credits }) => {
               Visit
             </a>
 
+            {/* Top Cast */}
             <div className="mt-4 text-black dark:text-white">
-              <h2 className="text-2xl font-semibold mb-2 ">Top Cast</h2>
+              <h2 className="text-2xl font-semibold mb-2 text-red-500">
+                Top Cast
+              </h2>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                 {topCast.map((actor) => (
                   <div key={actor.id} className="flex flex-col items-center">
@@ -128,19 +156,29 @@ const MovieDetailView = ({ movie, credits }) => {
               </div>
             </div>
 
-            <div className="mt-6">
-              <h2 className="text-2xl font-semibold mb-2 text-red-500">
-                Producers
-              </h2>
-              <ul className="space-y-1">
-                {producers.map((producer) => (
-                  <li key={producer.id}>
-                    <span className="font-semibold text-black dark:text-white">
-                      {producer.name}
-                    </span>
-                  </li>
+            {/* Similar Movies */}
+            <h2 className="text-2xl font-semibold mb-4 text-red-500">
+              Similar Movies
+            </h2>
+            <div className="overflow-x-auto mt-6 max-w-full flex">
+              <div className="flex space-x-4">
+                {similarMovies.map((similar) => (
+                  <div
+                    key={similar.id}
+                    className="flex-shrink-0 w-32 rounded-lg p-2 hover:bg-white hover:ease-out duration-300 dark:hover:bg-black hover:-translate-y-3 mt-3"
+                    onClick={() => navigate(`/movie-detail/${similar.id}`)}
+                  >
+                    <img
+                      src={`https://image.tmdb.org/t/p/w200${similar.poster_path}`}
+                      alt={similar.title}
+                      className="w-full h-48 object-cover rounded-lg shadow-md"
+                    />
+                    <p className="text-center mt-2 font-semibold text-gray-900 dark:text-white">
+                      {similar.title}
+                    </p>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div>
           </div>
         </div>

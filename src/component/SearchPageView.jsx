@@ -65,7 +65,7 @@ const SearchPageView = () => {
                   minHeight: "150px",
                   cursor: "pointer",
                 }}
-                onClick={() => navigate(`/movie-detail/${movie.id}`)} // Menggunakan navigate
+                onClick={() => navigate(`/movie-detail/${movie.id}`)} 
               >
                 <div
                   className="absolute inset-0 bg-black opacity-60 rounded-lg"
@@ -79,7 +79,7 @@ const SearchPageView = () => {
                 />
                 <div className="flex flex-col z-10">
                   {" "}
-                  {/* Pastikan teks berada di atas layer */}
+                  
                   <h3 className="text-2xl font-poppins mb-2 text-left">
                     {movie.title}
                   </h3>
