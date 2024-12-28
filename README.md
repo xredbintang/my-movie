@@ -4,6 +4,8 @@
 **Website ini tidak dapat melakukan streaming** (Pasal 113 Ayat 4).  
 Ini adalah contoh **Website Film** dengan fitur-fitur yang memungkinkan interaksi hampir di semua bagian.
 
+**Bisa di cek di url ini** https://xreddd-movie.vercel.app/
+
 ---
 
 ## 🚧 **Fitur yang Belum Tersedia**
